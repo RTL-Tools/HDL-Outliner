@@ -1,0 +1,39 @@
+{
+  "name": "hdl-outliner",
+  "displayName": "HDL Outliner",
+  "description": "Side-panel outline of SV/Verilog/VHDL files: instances, processes, constants, types, signals.",
+  "version": "0.0.1",
+  "publisher": "fpga-james",
+  "icon": "media/icon.png",
+  "engines": { "vscode": "^1.90.0" },
+  "categories": ["Other"],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [{ "id": "hdlOutline", "title": "HDL Outline", "icon": "media/activity-icon.svg" }]
+    },
+    "views": {
+      "hdlOutline": [{ "id": "hdlOutline.tree", "name": "Outline" }]
+    },
+    "commands": [
+      { "command": "hdlOutline.refresh", "title": "HDL Outline: Refresh", "icon": "$(refresh)" },
+      { "command": "hdlOutline.filter", "title": "HDL Outline: Choose Shown Groups", "icon": "$(filter)" },
+      { "command": "hdlOutline.dump", "title": "HDL Outline: Dump Symbols (debug)" }
+    ],
+    "menus": {
+      "view/title": [
+        { "command": "hdlOutline.filter", "when": "view == hdlOutline.tree", "group": "navigation" },
+        { "command": "hdlOutline.refresh", "when": "view == hdlOutline.tree", "group": "navigation" }
+      ]
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "test": "tsc -p . && node out/scan.test.js && node test/parse.test.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.4.0"
+  }
+}

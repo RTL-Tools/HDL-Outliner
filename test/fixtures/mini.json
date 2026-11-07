@@ -1,0 +1,6 @@
+[
+ {"name":"entity 'e'","kind":2,"range":{"start":{"line":0,"character":0},"end":{"line":2,"character":11}},"selectionRange":{"start":{"line":0,"character":7},"end":{"line":0,"character":8}},
+  "children":[{"name":"port 'clk' : in","kind":11,"range":{"start":{"line":1,"character":8},"end":{"line":1,"character":26}},"selectionRange":{"start":{"line":1,"character":8},"end":{"line":1,"character":11}}}]},
+ {"name":"architecture 'rtl'","kind":2,"range":{"start":{"line":3,"character":0},"end":{"line":6,"character":17}},"selectionRange":{"start":{"line":3,"character":13},"end":{"line":3,"character":16}},
+  "children":[{"name":"signal 's'","kind":24,"range":{"start":{"line":4,"character":2},"end":{"line":4,"character":22}},"selectionRange":{"start":{"line":4,"character":9},"end":{"line":4,"character":10}}}]}
+]

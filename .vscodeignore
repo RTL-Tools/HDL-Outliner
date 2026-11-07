@@ -1,0 +1,12 @@
+.vscode/**
+src/**
+out/**/*.map
+out/scan.test.js
+tsconfig.json
+node_modules/**
+docs/**
+.gitignore
+media/icon.svg
+Claude outputs/**
+media/icon.svg
+test/**
