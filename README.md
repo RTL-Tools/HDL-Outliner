@@ -4,6 +4,18 @@ HDL-Outliner adds a side-panel view that breaks the active SystemVerilog, Verilo
 
 <!-- screenshots: add to media/ and link here -->
 
+**Version 0.1.0** (first release). See the [changelog](CHANGELOG.md).
+
+## Install
+
+This release is distributed as a VSIX:
+
+```
+code --install-extension hdl-outliner-0.1.0.vsix
+```
+
+Then open the **HDL Outline** icon in the activity bar and click an SV, Verilog or VHDL file.
+
 ## Features
 
 - Shows the **active editor's file only** and follows you as you switch tabs. The outline refreshes shortly after you stop typing. While the file has a syntax error and the language server returns nothing, the last good outline stays on screen.
@@ -11,6 +23,7 @@ HDL-Outliner adds a side-panel view that breaks the active SystemVerilog, Verilo
 - The filter button in the panel title hides groups you don't want, for example Signals. The choice is remembered per workspace.
 - The refresh button re-reads the file, useful if the language server wasn't ready when the file was opened.
 - If no language server answers for a file, the panel says so instead of showing a partial outline silently.
+- `HDL Outline: Dump Symbols (debug)` (command palette) opens what the language servers returned next to what the outline built from it. Attach it to bug reports.
 
 ## Requirements
 
