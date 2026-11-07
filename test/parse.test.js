@@ -19,17 +19,24 @@ const doc = {
   getText: (r) => (r ? text.slice(off(r.start), off(r.end)) : text), lineAt: (n) => ({ text: L[n] }),
   positionAt(o) { let l = 0; while (o > L[l].length) { o -= L[l].length + 1; l++; } return new Position(l, o); }, offsetAt: off,
 };
-const handlers = {}; let dump;
+const handlers = {}; let dump, broken = false, provider;
 const vscode = {
   Position, Range, DocumentSymbol, ThemeIcon: class {}, TreeItem: class {}, TreeItemCollapsibleState: {}, EventEmitter: class { constructor() { this.event = () => {}; } fire() {} },
-  window: { activeTextEditor: { document: doc }, createTreeView: () => ({}), onDidChangeActiveTextEditor() {}, showTextDocument(d) { dump = d; } },
-  commands: { registerCommand: (n, f) => ((handlers[n] = f), {}), executeCommand: async () => JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/mini.json'))).map(conv) },
-  workspace: { openTextDocument: async (x) => (x && x.content ? { content: x.content } : doc), onDidSaveTextDocument() {} },
+  window: { activeTextEditor: { document: doc }, createTreeView: (id, o) => ((provider = o.treeDataProvider), {}), onDidChangeActiveTextEditor() {}, showTextDocument(d) { dump = d; } },
+  commands: { registerCommand: (n, f) => ((handlers[n] = f), {}), executeCommand: async () => (broken ? [] : JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/mini.json'))).map(conv)) },
+  workspace: { openTextDocument: async (x) => (x && x.content ? { content: x.content } : doc), onDidChangeTextDocument() {} },
 };
 const load = Module._load; Module._load = function (r, ...a) { return r === 'vscode' ? vscode : load.call(this, r, ...a); };
 require('../out/extension.js').activate({ subscriptions: [], workspaceState: { get: (k, d) => d, update: async () => {} } });
-handlers['hdlOutline.dump']().then(() => {
+const names = async () => (await provider.getChildren()).map((n) => n.unit.name);
+(async () => {
+  await handlers['hdlOutline.dump']();
   const units = JSON.parse(dump.content).units;
   assert.deepStrictEqual(units, [{ name: 'entity e', items: ['port:clk'] }, { name: 'architecture rtl of e', items: ['signal:s'] }]);
+  const good = ['entity e', 'architecture rtl of e'];
+  assert.deepStrictEqual(await names(), good);
+  // mid-edit: the server returns nothing after an invalidation -> the last good outline stays
+  broken = true; provider.refresh();
+  assert.deepStrictEqual(await names(), good);
   console.log('parse tests ok');
-}).catch((e) => { console.error(e); process.exit(1); });
+})().catch((e) => { console.error(e); process.exit(1); });

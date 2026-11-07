@@ -81,6 +81,7 @@ class Outline implements vscode.TreeDataProvider<Node> {
   private ev = new vscode.EventEmitter<void>();
   readonly onDidChangeTreeData = this.ev.event;
   private cache = new Map<string, { units: Unit[]; lsp: boolean }>();
+  private last = new Map<string, { units: Unit[]; lsp: boolean }>(); // last result the LSP actually answered
   status: (msg?: string) => void = () => {}; // set by activate: drives the view's message line
   hidden: Set<string>;
   uri?: vscode.Uri; // last HDL file that was active; kept while a non-HDL editor has focus
@@ -108,14 +109,14 @@ class Outline implements vscode.TreeDataProvider<Node> {
     switch (n.t) {
       case 'unit': {
         const t = new vscode.TreeItem(n.unit.name, vscode.TreeItemCollapsibleState.Expanded);
-        t.id = `${n.uri}#${n.unit.name}@${n.unit.pos.line}`;
+        t.id = `${n.uri}#${n.unit.name}`;
         t.iconPath = new vscode.ThemeIcon('symbol-module');
         t.command = open(n.uri, n.unit.pos);
         return t;
       }
       case 'group': {
         const t = new vscode.TreeItem(`${LABEL[n.group][0]} (${n.items.length})`, vscode.TreeItemCollapsibleState.Expanded);
-        t.id = `${n.uri}#${n.unit.name}@${n.unit.pos.line}:${n.group}`;
+        t.id = `${n.uri}#${n.unit.name}:${n.group}`;
         t.iconPath = new vscode.ThemeIcon(LABEL[n.group][1]);
         return t;
       }
@@ -136,7 +137,9 @@ class Outline implements vscode.TreeDataProvider<Node> {
       let r = this.cache.get(uri.toString());
       if (!r) {
         r = await parse(uri);
-        if (r.units.length) this.cache.set(uri.toString(), r); // empty may just mean the LSP is not ready yet
+        const key = uri.toString();
+        if (r.lsp) { this.last.set(key, r); this.cache.set(key, r); } // not cached without the LSP: it may just not be ready yet
+        else r = this.last.get(key) ?? r; // mid-edit syntax errors make servers return nothing: keep the last good outline
       }
       this.status(r.lsp ? undefined : 'No symbols from a language server for this file (is it running?). Showing a text scan of constants, types, ports and tasks only.');
       return r.units.map((unit) => ({ t: 'unit', uri, unit }));
@@ -156,6 +159,7 @@ const open = (uri: vscode.Uri, pos: vscode.Position): vscode.Command =>
 
 export function activate(ctx: vscode.ExtensionContext) {
   const outline = new Outline(ctx.workspaceState);
+  let timer: ReturnType<typeof setTimeout> | undefined;
   const view = vscode.window.createTreeView('hdlOutline.tree', { treeDataProvider: outline });
   outline.status = (m) => (view.message = m);
   const show = (doc?: vscode.TextDocument) => outline.setActive(doc) && (view.description = path.basename(doc!.uri.fsPath));
@@ -174,6 +178,11 @@ export function activate(ctx: vscode.ExtensionContext) {
       const content = JSON.stringify({ file: uri.fsPath, hiddenGroups: [...outline.hidden], raw: raw.map(slim), units: r.units.map((u) => ({ name: u.name, items: u.items.map((i) => `${i.group}:${i.name}`) })) }, null, 1);
       vscode.window.showTextDocument(await vscode.workspace.openTextDocument({ language: 'json', content }));
     }),
-    vscode.workspace.onDidSaveTextDocument((d) => LANGS.includes(d.languageId) && outline.invalidate(d.uri)),
+    vscode.workspace.onDidChangeTextDocument((e) => {
+      if (e.document.uri.toString() !== outline.uri?.toString()) return;
+      clearTimeout(timer);
+      timer = setTimeout(() => outline.invalidate(e.document.uri), 600);
+    }),
+    { dispose: () => clearTimeout(timer) },
   );
 }

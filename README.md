@@ -6,7 +6,7 @@ HDL-Outliner adds a side-panel view that breaks the active SystemVerilog, Verilo
 
 ## Features
 
-- Shows the **active editor's file only** and follows you as you switch tabs. The outline refreshes when you **save**.
+- Shows the **active editor's file only** and follows you as you switch tabs. The outline refreshes shortly after you stop typing. While the file has a syntax error and the language server returns nothing, the last good outline stays on screen.
 - Ports show their direction: `in`, `out` or `inout`. Interface-typed ports (`axil_if.slave s_axil`) show as `inout`.
 - The filter button in the panel title hides groups you don't want, for example Signals. The choice is remembered per workspace.
 - The refresh button re-reads the file, useful if the language server wasn't ready when the file was opened.
@@ -29,4 +29,3 @@ If you have more than one extension providing symbols for a language (for exampl
 - **Port scan:** only the first name after a direction keyword is found (`input logic a, b` misses `b`), and an interface port with no modport (`axil_if s`) is missed. Interface ports show as `inout` without reading the modport.
 - **Regex scan:** constants and types are not parsed, so `parameter A = 1, B = 2` loses `B`.
 - **VHDL:** component declarations are listed under Types and aliases under Signals.
-- The outline updates on save, not as you type.
