@@ -49,6 +49,7 @@ async function parse(uri: vscode.Uri): Promise<{ units: Unit[]; lsp: boolean }> 
   const add = (u: Unit, i: Item) => { if (!u.items.some((x) => x.name === i.name && x.group === i.group)) u.items.push(i); };
   const collect = (kids: vscode.DocumentSymbol[], u: Unit) => {
     for (const c of kids) {
+      if (c.name === u.name) continue; // the unit itself, reported again by a second provider; `module m (` would otherwise classify as an instance
       const g = classify(c.kind, doc.lineAt(c.range.start.line).text, doc.getText(c.range), c.name);
       if (g === 'scope') collect(c.children, u);
       else add(u, { name: shown(c.name), group: g, pos: c.selectionRange.start, dir: vhdlPortDir(c.name) });
