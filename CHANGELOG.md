@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1
+
+- Fix: a module or entity was listed as an instance of itself when a second SystemVerilog provider (e.g. `eirikpre.systemverilog`) reported it under its own name.
+- README: SystemVerilog and VHDL screenshots.
+
 ## 0.1.0
 
 First release.

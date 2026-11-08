@@ -2,7 +2,7 @@
   "name": "hdl-outliner",
   "displayName": "HDL Outliner",
   "description": "Side-panel outline of SV/Verilog/VHDL files: instances, processes, constants, types, signals.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "fpga-james",
   "repository": {
     "type": "git",
