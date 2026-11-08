@@ -4,7 +4,7 @@
 
 - Publisher ID is now `HDL-Tools` (extension id `HDL-Tools.hdl-outliner`). Uninstall any earlier `fpga-james.hdl-outliner` build.
 - Marketplace metadata: license, keywords, categories.
-- Releases are built and published by a GitHub Actions workflow on `v*` tags.
+- Releases are tested, built and published to the Marketplace (trusted publishing) by a GitHub Actions workflow on `v*` tags.
 
 ## 0.1.1
 
