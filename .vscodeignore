@@ -11,3 +11,4 @@ Claude outputs/**
 media/icon.svg
 test/**
 media/screenshot-*.png
+.github/**

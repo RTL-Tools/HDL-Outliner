@@ -10,14 +10,14 @@ HDL-Outliner adds a side-panel view that breaks the active SystemVerilog, Verilo
 
 *VHDL (vhdl_ls): `aes_core.vhd` from the AES project. Ports show their direction; the architecture lists its instances, processes and signals.*
 
-**Version 0.1.1**. See the [changelog](CHANGELOG.md).
+**Version 0.1.2**. See the [changelog](CHANGELOG.md).
 
 ## Install
 
 This release is distributed as a VSIX:
 
 ```
-code --install-extension hdl-outliner-0.1.1.vsix
+code --install-extension hdl-outliner-0.1.2.vsix
 ```
 
 Then open the **HDL Outline** icon in the activity bar and click an SV, Verilog or VHDL file.

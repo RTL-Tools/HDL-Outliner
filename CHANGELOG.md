@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2
+
+- Publisher ID is now `HDL-Tools` (extension id `HDL-Tools.hdl-outliner`). Uninstall any earlier `fpga-james.hdl-outliner` build.
+- Marketplace metadata: license, keywords, categories.
+- Releases are built and published by a GitHub Actions workflow on `v*` tags.
+
 ## 0.1.1
 
 - Fix: a module or entity was listed as an instance of itself when a second SystemVerilog provider (e.g. `eirikpre.systemverilog`) reported it under its own name.
