@@ -13,8 +13,19 @@
     "vscode": "^1.90.0"
   },
   "categories": [
-    "Other"
+    "Programming Languages",
+    "Visualization"
   ],
+  "keywords": [
+    "verilog",
+    "systemverilog",
+    "vhdl",
+    "fpga",
+    "rtl",
+    "outline",
+    "hdl"
+  ],
+  "license": "Apache-2.0",
   "main": "./out/extension.js",
   "contributes": {
     "viewsContainers": {
