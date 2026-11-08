@@ -2,7 +2,9 @@
 
 HDL-Outliner adds a side-panel view that breaks the active SystemVerilog, Verilog or VHDL file into collapsible groups: **Instances, Processes, Ports, Constants, Types, Signals and Functions**, per module / entity / package / interface. Click any entry to jump to it. It reads symbols from the language server you already use (verible-ls, vhdl_ls) and fills in what those servers leave out with a small text scan.
 
-<!-- screenshots: add to media/ and link here -->
+![HDL Outline for aes_core.vhd: entity ports with direction arrows, then the architecture's instances, processes and signals](media/screenshot-vhdl.png)
+
+*VHDL (vhdl_ls): `aes_core.vhd` from the AES project. Ports show their direction; the architecture lists its instances, processes and signals.*
 
 **Version 0.1.0** (first release). See the [changelog](CHANGELOG.md).
 
